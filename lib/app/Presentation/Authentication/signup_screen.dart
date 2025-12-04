@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/Presentation/Authentication/login_screen.dart';
+import 'package:task_manager/app/Presentation/TaksScreens/home_screen.dart';
 import 'package:task_manager/app/common/Containers/stylish_container.dart';
 import 'package:task_manager/app/common/Textfields/re_elevatedbutton.dart';
 import 'package:task_manager/app/common/Textfields/re_textbutton.dart';
@@ -58,7 +59,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     Gap(15),
                     ReElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      },
                       text: 'Create an Account',
                     ),
                     Gap(10),
