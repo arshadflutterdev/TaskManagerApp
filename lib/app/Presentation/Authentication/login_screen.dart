@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:task_manager/app/Presentation/Authentication/login_screen.dart';
+import 'package:task_manager/app/Presentation/Authentication/signup_screen.dart';
 import 'package:task_manager/app/common/Containers/stylish_container.dart';
 import 'package:task_manager/app/common/Textfields/re_elevatedbutton.dart';
 import 'package:task_manager/app/common/Textfields/re_textbutton.dart';
 import 'package:task_manager/app/common/Textfields/retextfield.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
-  TextEditingController nameController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -27,39 +25,36 @@ class _SignupScreenState extends State<SignupScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: StylishContainer(
-            heights: height * 0.62,
+            heights: height * 0.55,
             widhts: double.infinity,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Gap(15),
                     Text(
-                      "Create Your Account😍",
+                      "WelCome Back😍",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Gap(15),
-                    ReTextfield(lable: 'name', controller: nameController),
+                    ReTextfield(lable: 'email', controller: emailController),
                     Gap(10),
                     ReTextfield(
                       keyboardype: TextInputType.emailAddress,
-                      lable: 'email adress',
-                      controller: nameController,
+                      lable: 'email',
+                      controller: passwordController,
                     ),
-                    Gap(10),
-                    ReTextfield(
-                      lable: 'password',
-                      controller: nameController,
-                      keyboardype: TextInputType.number,
-                    ),
+
                     Gap(15),
                     ReElevatedButton(
                       onPressed: () {},
-                      text: 'Create an Account',
+                      text: 'Login to Account',
                     ),
                     Gap(10),
                     Text("Or signin with"),
@@ -77,17 +72,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Already have an Account?"),
+                        Text("Already haven't Account?"),
                         ReTextbutton(
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
+                                builder: (context) => SignupScreen(),
                               ),
                             );
                           },
-                          text: "Login",
+                          text: "Signup",
                           style: TextStyle(fontSize: 18, color: Colors.green),
                         ),
                       ],
@@ -100,5 +95,6 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+    ;
   }
 }
