@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 class ReTextfield extends StatelessWidget {
   final String lable;
   final TextEditingController controller;
-  const ReTextfield({super.key, required this.lable, required this.controller});
+  final TextInputType? keyboardype;
+  const ReTextfield({
+    super.key,
+    required this.lable,
+    required this.controller,
+    this.keyboardype,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: keyboardype,
+      style: TextStyle(fontSize: 18),
       cursorColor: Colors.black,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
