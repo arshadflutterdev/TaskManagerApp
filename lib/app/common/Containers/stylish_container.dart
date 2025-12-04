@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class StylishContainer extends StatelessWidget {
   final double heights;
   final double widhts;
+  final Widget? child;
   const StylishContainer({
     super.key,
     required this.heights,
+    this.child,
     required this.widhts,
   });
 
@@ -26,6 +28,7 @@ class StylishContainer extends StatelessWidget {
           ),
         ],
       ),
+      child: child,
     );
   }
 }
