@@ -12,6 +12,11 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
+  uploadtask() async {
+    String heading = headingController.text;
+    String detail = detailsController.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

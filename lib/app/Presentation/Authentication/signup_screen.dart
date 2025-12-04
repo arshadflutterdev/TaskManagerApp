@@ -72,8 +72,6 @@ class _SignupScreenState extends State<SignupScreen> {
         idToken: userauth.idToken,
       );
       if (credential != null) {
-        Map<String, dynamic> googleuser = {"usercredential": credential};
-        _firestore.add(googleuser);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
