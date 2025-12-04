@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/Presentation/Authentication/signup_screen.dart';
@@ -17,6 +18,31 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final auth = FirebaseAuth.instance;
+  final _globalke = GlobalKey<FormState>();
+  loguser() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+    try {
+      if (_globalke.currentState!.validate()) {
+        UserCredential? userr = await auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        if (userr != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("exception ${e.toString()}")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -44,9 +70,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Gap(15),
-                    ReTextfield(lable: 'email', controller: emailController),
+                    ReTextfield(
+                      lable: 'email',
+                      controller: emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Add your email";
+                        }
+                        return null;
+                      },
+                    ),
                     Gap(10),
                     ReTextfield(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Add password";
+                        }
+                        return null;
+                      },
                       keyboardype: TextInputType.emailAddress,
                       lable: 'email',
                       controller: passwordController,
@@ -54,11 +95,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     Gap(15),
                     ReElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
+                      onPressed: () async {
+                        await loguser();
                       },
                       text: 'Login to Account',
                     ),

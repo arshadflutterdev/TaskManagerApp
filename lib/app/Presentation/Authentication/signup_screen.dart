@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/Presentation/Authentication/login_screen.dart';
@@ -18,7 +19,33 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final auth = FirebaseAuth.instance;
+  userauth() async {
+    String name = nameController.text;
+    String email = emailController.text;
+    String password = passwordController.text;
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("fill fields")));
+    }
+    try {
+      UserCredential? userCredential = await auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      if (userCredential != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error ${e.toString()}")));
+    }
+  }
 
+  final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -33,72 +60,95 @@ class _SignupScreenState extends State<SignupScreen> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Gap(15),
-                    Text(
-                      "Create Your Account😍",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Gap(15),
-                    ReTextfield(lable: 'name', controller: nameController),
-                    Gap(10),
-                    ReTextfield(
-                      keyboardype: TextInputType.emailAddress,
-                      lable: 'email adress',
-                      controller: nameController,
-                    ),
-                    Gap(10),
-                    ReTextfield(
-                      lable: 'password',
-                      controller: nameController,
-                      keyboardype: TextInputType.number,
-                    ),
-                    Gap(15),
-                    ReElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                      },
-                      text: 'Create an Account',
-                    ),
-                    Gap(10),
-                    Text("Or signin with"),
-                    ReTextbutton(
-                      onPressed: () {},
-                      text: 'Google',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Already have an Account?"),
-                        ReTextbutton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
-                              ),
-                            );
-                          },
-                          text: "Login",
-                          style: TextStyle(fontSize: 18, color: Colors.green),
+                child: Form(
+                  key: globalKey,
+                  child: Column(
+                    children: [
+                      Gap(15),
+                      Text(
+                        "Create Your Account😍",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Gap(15),
+                      ReTextfield(
+                        validator: (value) {
+                          if (value.isEmpty || value == null) {
+                            return "Please enter your name";
+                          }
+                          return null;
+                        },
+                        lable: 'name',
+                        controller: nameController,
+                      ),
+                      Gap(10),
+                      ReTextfield(
+                        validator: (value) {
+                          if (value.isEmpty || value == null) {
+                            return "Please enter email";
+                          }
+                          return null;
+                        },
+                        keyboardype: TextInputType.emailAddress,
+                        lable: 'email adress',
+                        controller: emailController,
+                      ),
+                      Gap(10),
+                      ReTextfield(
+                        validator: (value) {
+                          if (value.isEmpty || value == null) {
+                            return "create password";
+                          }
+                          return null;
+                        },
+                        lable: 'password',
+                        controller: passwordController,
+                        keyboardype: TextInputType.number,
+                      ),
+                      Gap(15),
+                      ReElevatedButton(
+                        onPressed: () async {
+                          if (globalKey.currentState!.validate()) {
+                            await userauth();
+                          }
+                        },
+                        text: 'Create an Account',
+                      ),
+                      Gap(10),
+                      Text("Or signin with"),
+                      ReTextbutton(
+                        onPressed: () {},
+                        text: 'Google',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Already have an Account?"),
+                          ReTextbutton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ),
+                              );
+                            },
+                            text: "Login",
+                            style: TextStyle(fontSize: 18, color: Colors.green),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

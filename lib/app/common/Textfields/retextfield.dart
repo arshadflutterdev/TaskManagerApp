@@ -5,17 +5,21 @@ class ReTextfield extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType? keyboardype;
   final TextStyle? style;
+  final FormFieldValidator? validator;
   const ReTextfield({
     super.key,
+
     required this.lable,
     required this.controller,
     this.keyboardype,
     this.style,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      validator: validator,
       keyboardType: keyboardype,
       style: style,
       cursorColor: Colors.black,
