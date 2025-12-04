@@ -1,32 +1,25 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/common/Textfields/retextfield.dart';
 
-class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+class DeatilsScreen extends StatefulWidget {
+  const DeatilsScreen({super.key});
 
   @override
-  State<AddTask> createState() => _AddTaskState();
+  State<DeatilsScreen> createState() => _DeatilsScreenState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _DeatilsScreenState extends State<DeatilsScreen> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        child: Icon(Icons.check, color: Colors.amber, size: 40),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        title: Text("Add Your Task"),
+        title: Text("Task Details"),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -47,33 +40,22 @@ class _AddTaskState extends State<AddTask> {
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               Gap(10),
-              ReTextfield(
-                lable: "Add Heading",
-                controller: headingController,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
+              Text("Appointment with Cm", style: TextStyle(fontSize: 22)),
               Gap(10),
               Text(
                 "Details",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
               ),
               Gap(10),
-              ReTextfield(
-                lable: "Add Heading",
-                controller: headingController,
+              Text(
+                textAlign: TextAlign.left,
+                textDirection: TextDirection.ltr,
+                "psum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of ",
                 style: TextStyle(fontSize: 18),
               ),
               Gap(15),
-              Text(
-                "Select final date",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
-              ),
-              CalendarDatePicker(
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2025),
-                lastDate: DateTime(2030),
-                onDateChanged: (value) {},
-              ),
+              Text("Due date"),
+              Text("12-4-2025"),
             ],
           ),
         ),

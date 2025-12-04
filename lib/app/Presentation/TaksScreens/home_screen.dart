@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/Presentation/TaksScreens/add_task.dart';
+import 'package:task_manager/app/Presentation/TaksScreens/deatils_screen.dart';
+import 'package:task_manager/app/Presentation/TaksScreens/update_task.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
-        child: Icon(CupertinoIcons.add_circled, size: 30, color: Colors.white),
+        child: Icon(CupertinoIcons.add_circled, size: 40, color: Colors.amber),
 
         onPressed: () {
           Navigator.push(
@@ -49,7 +51,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text("Time to do this activity"),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DeatilsScreen(),
+                        ),
+                      );
+                    },
                     child: Row(
                       children: [
                         Icon(Icons.arrow_forward_ios, size: 15),
@@ -65,16 +74,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 child: Row(
                   children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        CupertinoIcons.timer,
-                        size: 30,
-                        color: Colors.green,
-                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => UpdateTask()),
+                        );
+                      },
+                      icon: Icon(Icons.edit),
                     ),
+
+                    Icon(CupertinoIcons.timer, color: Colors.green, size: 30),
                   ],
                 ),
               ),

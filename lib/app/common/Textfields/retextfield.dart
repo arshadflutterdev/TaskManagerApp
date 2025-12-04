@@ -4,20 +4,23 @@ class ReTextfield extends StatelessWidget {
   final String lable;
   final TextEditingController controller;
   final TextInputType? keyboardype;
+  final TextStyle? style;
   const ReTextfield({
     super.key,
     required this.lable,
     required this.controller,
     this.keyboardype,
+    this.style,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       keyboardType: keyboardype,
-      style: TextStyle(fontSize: 18),
+      style: style,
       cursorColor: Colors.black,
       decoration: InputDecoration(
+        label: Text(lable),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(color: Colors.black),

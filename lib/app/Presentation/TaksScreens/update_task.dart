@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/common/Textfields/retextfield.dart';
 
-class AddTask extends StatefulWidget {
-  const AddTask({super.key});
+class UpdateTask extends StatefulWidget {
+  const UpdateTask({super.key});
 
   @override
-  State<AddTask> createState() => _AddTaskState();
+  State<UpdateTask> createState() => _UpdateTaskState();
 }
 
-class _AddTaskState extends State<AddTask> {
+class _UpdateTaskState extends State<UpdateTask> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   @override
@@ -18,7 +18,7 @@ class _AddTaskState extends State<AddTask> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
-        child: Icon(Icons.check, color: Colors.amber, size: 40),
+        child: Icon(Icons.update, color: Colors.amber, size: 40),
         onPressed: () {
           Navigator.pop(context);
         },
@@ -79,5 +79,6 @@ class _AddTaskState extends State<AddTask> {
         ),
       ),
     );
+    ;
   }
 }
