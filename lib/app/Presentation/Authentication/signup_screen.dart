@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:task_manager/app/Presentation/Authentication/login_screen.dart';
 import 'package:task_manager/app/Presentation/TaksScreens/home_screen.dart';
 import 'package:task_manager/app/common/Containers/stylish_container.dart';
@@ -19,6 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final _firestore = FirebaseFirestore.instance.collection("taskmanagerusers");
   final auth = FirebaseAuth.instance;
   userauth() async {
     String name = nameController.text;
@@ -33,6 +36,12 @@ class _SignupScreenState extends State<SignupScreen> {
       UserCredential? userCredential = await auth
           .createUserWithEmailAndPassword(email: email, password: password);
       if (userCredential != null) {
+        Map<String, dynamic> userss = {
+          "name": name,
+          "email": email,
+          "password": password,
+        };
+        _firestore.add(userss);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -46,6 +55,38 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   final GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+  //signin with google
+  signingoogle() async {
+    final signin = GoogleSignIn.instance;
+    await signin.initialize(
+      serverClientId:
+          "495185543742-kf8cekehr5gv4c5l39ilhmisj3midn3n.apps.googleusercontent.com",
+    );
+    try {
+      final GoogleSignInAccount? usersign = await signin.authenticate();
+      if (usersign == null) {
+        return;
+      }
+      final GoogleSignInAuthentication userauth = usersign.authentication;
+      final credential = GoogleAuthProvider.credential(
+        idToken: userauth.idToken,
+      );
+      if (credential != null) {
+        Map<String, dynamic> googleuser = {"usercredential": credential};
+        _firestore.add(googleuser);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }
+      return await auth.signInWithCredential(credential);
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error ${e.toString()}")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
@@ -119,7 +160,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       Gap(10),
                       Text("Or signin with"),
                       ReTextbutton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await signingoogle();
+                        },
                         text: 'Google',
                         style: TextStyle(
                           fontSize: 30,

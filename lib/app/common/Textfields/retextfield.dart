@@ -19,6 +19,7 @@ class ReTextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       validator: validator,
       keyboardType: keyboardype,
       style: style,

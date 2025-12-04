@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/Presentation/Authentication/signup_screen.dart';
 import 'package:task_manager/app/Presentation/TaksScreens/home_screen.dart';
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
     String password = passwordController.text;
     try {
       if (_globalke.currentState!.validate()) {
-        UserCredential? userr = await auth.signInWithEmailAndPassword(
+        UserCredential userr = await auth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -56,82 +57,85 @@ class _LoginScreenState extends State<LoginScreen> {
             widhts: double.infinity,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Gap(15),
-                    Text(
-                      "WelCome Back😍",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Gap(15),
-                    ReTextfield(
-                      lable: 'email',
-                      controller: emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Add your email";
-                        }
-                        return null;
-                      },
-                    ),
-                    Gap(10),
-                    ReTextfield(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Add password";
-                        }
-                        return null;
-                      },
-                      keyboardype: TextInputType.emailAddress,
-                      lable: 'email',
-                      controller: passwordController,
-                    ),
-
-                    Gap(15),
-                    ReElevatedButton(
-                      onPressed: () async {
-                        await loguser();
-                      },
-                      text: 'Login to Account',
-                    ),
-                    Gap(10),
-                    Text("Or signin with"),
-                    ReTextbutton(
-                      onPressed: () {},
-                      text: 'Google',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text("Already haven't Account?"),
-                        ReTextbutton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignupScreen(),
-                              ),
-                            );
-                          },
-                          text: "Signup",
-                          style: TextStyle(fontSize: 18, color: Colors.green),
+              child: Form(
+                key: _globalke,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Gap(15),
+                      Text(
+                        "WelCome Back😍",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Gap(15),
+                      ReTextfield(
+                        lable: 'email',
+                        controller: emailController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Add your email";
+                          }
+                          return null;
+                        },
+                      ),
+                      Gap(10),
+                      ReTextfield(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Add password";
+                          }
+                          return null;
+                        },
+                        keyboardype: TextInputType.number,
+                        lable: 'password',
+                        controller: passwordController,
+                      ),
+
+                      Gap(15),
+                      ReElevatedButton(
+                        onPressed: () async {
+                          await loguser();
+                        },
+                        text: 'Login to Account',
+                      ),
+                      Gap(10),
+                      Text("Or signin with"),
+                      ReTextbutton(
+                        onPressed: () {},
+                        text: 'Google',
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Already haven't Account?"),
+                          ReTextbutton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignupScreen(),
+                                ),
+                              );
+                            },
+                            text: "Signup",
+                            style: TextStyle(fontSize: 18, color: Colors.green),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
