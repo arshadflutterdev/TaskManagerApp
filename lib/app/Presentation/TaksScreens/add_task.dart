@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:task_manager/app/Presentation/TaksScreens/home_screen.dart';
 import 'package:task_manager/app/common/Textfields/retextfield.dart';
 
 class AddTask extends StatefulWidget {
@@ -12,9 +14,31 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
+  final _firestore = FirebaseFirestore.instance.collection("tasks");
   uploadtask() async {
     String heading = headingController.text;
     String detail = detailsController.text;
+    if (heading.isEmpty || detail.isEmpty) {
+      return ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Fill all fields")));
+    } else {
+      try {
+        Map<String, dynamic> taskss = {"heading": heading, "details": detail};
+        final taask = await _firestore.add(taskss);
+        print("task details $taask");
+        if (taask != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("error ${e.toString()}")));
+      }
+    }
   }
 
   @override
@@ -24,8 +48,8 @@ class _AddTaskState extends State<AddTask> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         child: Icon(Icons.check, color: Colors.amber, size: 40),
-        onPressed: () {
-          Navigator.pop(context);
+        onPressed: () async {
+          await uploadtask();
         },
       ),
       appBar: AppBar(
@@ -65,7 +89,7 @@ class _AddTaskState extends State<AddTask> {
               Gap(10),
               ReTextfield(
                 lable: "Add Heading",
-                controller: headingController,
+                controller: detailsController,
                 style: TextStyle(fontSize: 18),
               ),
               Gap(15),

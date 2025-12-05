@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/common/Textfields/retextfield.dart';
 
 class DeatilsScreen extends StatefulWidget {
-  const DeatilsScreen({super.key});
+  final String task;
+  const DeatilsScreen({super.key, required this.task});
 
   @override
   State<DeatilsScreen> createState() => _DeatilsScreenState();
@@ -13,6 +15,13 @@ class DeatilsScreen extends StatefulWidget {
 class _DeatilsScreenState extends State<DeatilsScreen> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
+  final _firestore = FirebaseFirestore.instance.collection("tasks");
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
