@@ -16,10 +16,16 @@ class _DeatilsScreenState extends State<DeatilsScreen> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   final _firestore = FirebaseFirestore.instance.collection("tasks");
+  getTask() async {
+    DocumentSnapshot task = await _firestore.doc(widget.taskId).get();
+    print('here is data ${task.data()}');
+    return task.data();
+  }
 
   @override
   void initState() {
     super.initState();
+    getTask();
   }
 
   @override
@@ -37,37 +43,54 @@ class _DeatilsScreenState extends State<DeatilsScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Heading",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+      body: FutureBuilder(
+        future: getTask(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            final data = snapshot.data as Map<String, dynamic>;
+
+            return Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data["heading"] ?? "",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Gap(10),
+                    Text("Appointment with Cm", style: TextStyle(fontSize: 22)),
+                    Gap(10),
+                    Text(
+                      "Details",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    Gap(10),
+                    Text(
+                      textAlign: TextAlign.left,
+                      textDirection: TextDirection.ltr,
+                      data["details"],
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Gap(15),
+                    Text("Due date"),
+                    Text("12-4-2025"),
+                  ],
+                ),
               ),
-              Gap(10),
-              Text("Appointment with Cm", style: TextStyle(fontSize: 22)),
-              Gap(10),
-              Text(
-                "Details",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
-              ),
-              Gap(10),
-              Text(
-                textAlign: TextAlign.left,
-                textDirection: TextDirection.ltr,
-                "psum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of ",
-                style: TextStyle(fontSize: 18),
-              ),
-              Gap(15),
-              Text("Due date"),
-              Text("12-4-2025"),
-            ],
-          ),
-        ),
+            );
+          }
+        },
       ),
     );
   }

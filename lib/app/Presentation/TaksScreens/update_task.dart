@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:task_manager/app/common/Textfields/retextfield.dart';
 
 class UpdateTask extends StatefulWidget {
-  const UpdateTask({super.key});
+  final String taskId;
+  const UpdateTask({super.key, required this.taskId});
 
   @override
   State<UpdateTask> createState() => _UpdateTaskState();
@@ -12,6 +14,52 @@ class UpdateTask extends StatefulWidget {
 class _UpdateTaskState extends State<UpdateTask> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
+  TextEditingController updatedController = TextEditingController();
+  final _firestore = FirebaseFirestore.instance.collection("tasks");
+
+  getTask() async {
+    DocumentSnapshot docss = await _firestore.doc(widget.taskId).get();
+    final dataa = docss.data();
+    if (dataa != null) {
+      headingController.text = docss["heading"];
+      detailsController.text = docss["details"];
+      setState(() {
+        updatedController.text = docss["updatedAt"] ?? "yet not updated";
+      });
+      print("here is data$dataa");
+    }
+    return dataa;
+  }
+
+  void initState() {
+    super.initState();
+    getTask();
+  }
+
+  final time = DateTime.now();
+
+  //update task
+  taskupdate() async {
+    try {
+      final formatedtime =
+          "${time.hour}-${time.minute}-${time.day}-${time.month}-${time.year}";
+      Map<String, dynamic> taskupdate = {
+        "heading": headingController.text.trim(),
+        "details": detailsController.text.trim(),
+
+        "updatedAt": formatedtime,
+      };
+      _firestore.doc(widget.taskId).update(taskupdate);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Your Task Updated")));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error  ${e.toString()}")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,14 +67,15 @@ class _UpdateTaskState extends State<UpdateTask> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         child: Icon(Icons.update, color: Colors.amber, size: 40),
-        onPressed: () {
+        onPressed: () async {
+          await taskupdate();
           Navigator.pop(context);
         },
       ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        title: Text("Add Your Task"),
+        title: Text("Update Your Task"),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -42,9 +91,15 @@ class _UpdateTaskState extends State<UpdateTask> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Heading",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    "Heading",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  ),
+                  Spacer(),
+                  Text("Updated At${updatedController.text} "),
+                ],
               ),
               Gap(10),
               ReTextfield(
@@ -60,7 +115,7 @@ class _UpdateTaskState extends State<UpdateTask> {
               Gap(10),
               ReTextfield(
                 lable: "Add Heading",
-                controller: headingController,
+                controller: detailsController,
                 style: TextStyle(fontSize: 18),
               ),
               Gap(15),

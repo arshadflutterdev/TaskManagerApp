@@ -15,6 +15,7 @@ class _AddTaskState extends State<AddTask> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
   final _firestore = FirebaseFirestore.instance.collection("tasks");
+  final now = DateTime.now();
   uploadtask() async {
     String heading = headingController.text;
     String detail = detailsController.text;
@@ -24,7 +25,13 @@ class _AddTaskState extends State<AddTask> {
       ).showSnackBar(SnackBar(content: Text("Fill all fields")));
     } else {
       try {
-        Map<String, dynamic> taskss = {"heading": heading, "details": detail};
+        final timestamp =
+            "${now.hour}-${now.minute}-${now.day}-${now.month}-${now.year}";
+        Map<String, dynamic> taskss = {
+          "heading": heading,
+          "details": detail,
+          "createdAt": timestamp,
+        };
         final taask = await _firestore.add(taskss);
         print("task details $taask");
         if (taask != null) {
