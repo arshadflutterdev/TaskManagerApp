@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: 2,
                   child: ListTile(
                     title: Text(
-                      docdata["docId"],
+                      docdata["heading"],
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.normal,
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    DeatilsScreen(task: "docId"),
+                                    DeatilsScreen(taskId: docdata["docId"]),
                               ),
                             );
                           },

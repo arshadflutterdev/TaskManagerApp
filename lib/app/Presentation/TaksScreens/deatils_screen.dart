@@ -5,8 +5,8 @@ import 'package:gap/gap.dart';
 import 'package:task_manager/app/common/Textfields/retextfield.dart';
 
 class DeatilsScreen extends StatefulWidget {
-  final String task;
-  const DeatilsScreen({super.key, required this.task});
+  String taskId;
+  DeatilsScreen({super.key, required this.taskId});
 
   @override
   State<DeatilsScreen> createState() => _DeatilsScreenState();
@@ -28,7 +28,7 @@ class _DeatilsScreenState extends State<DeatilsScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        title: Text("Task Details"),
+        title: Text("Task_Details"),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
