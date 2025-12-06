@@ -14,11 +14,13 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   TextEditingController headingController = TextEditingController();
   TextEditingController detailsController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
   final _firestore = FirebaseFirestore.instance.collection("tasks");
   final now = DateTime.now();
   uploadtask() async {
     String heading = headingController.text;
     String detail = detailsController.text;
+    String time = timeController.text;
     if (heading.isEmpty || detail.isEmpty) {
       return ScaffoldMessenger.of(
         context,
@@ -31,6 +33,7 @@ class _AddTaskState extends State<AddTask> {
           "heading": heading,
           "details": detail,
           "createdAt": timestamp,
+          'startDate': ,
         };
         final taask = await _firestore.add(taskss);
         print("task details $taask");
